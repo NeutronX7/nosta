@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.3.0"
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -31,12 +33,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin {
         compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
     buildFeatures {
@@ -57,6 +59,10 @@ dependencies {
     //Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+
+    //Dagger hilt
+    implementation("com.google.dagger:hilt-android:2.57.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
