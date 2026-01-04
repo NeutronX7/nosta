@@ -5,6 +5,7 @@ plugins {
     kotlin("plugin.serialization") version "2.3.0"
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -55,16 +56,20 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
     //Dagger hilt
-    implementation("com.google.dagger:hilt-android:2.57.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    //Google services
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">nosta</string>
-    <string name="welcome_nosta">Bienvenido a Nosta</string>
-    <string name="nosta_description">Un espacio dónde poodrás compartir gustos de tus cosas favoritas de la infancia</string>
+    <string name="welcome_nosta">Welcome to Nosta</string>
+    <string name="nosta_description">Space to share the things you loved in your childhood</string>
 </resources>

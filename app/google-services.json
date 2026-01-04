@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "10790205084",
+    "project_id": "nosta-6fc49",
+    "storage_bucket": "nosta-6fc49.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10790205084:android:1feee72c320244a5069f59",
+        "android_client_info": {
+          "package_name": "com.isaalutions.nosta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10790205084-1p88oeh4p6ihdvpnjp6843e3c00i87kk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuk1hX9wFl5BkcOqhtUMgR4AceD9vwCbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10790205084-1p88oeh4p6ihdvpnjp6843e3c00i87kk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

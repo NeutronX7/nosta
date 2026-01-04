@@ -13,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.isaalutions.nosta.ui.screens.Login
 import com.isaalutions.nosta.ui.screens.LoginScreen
+import com.isaalutions.nosta.ui.screens.Registration
+import com.isaalutions.nosta.ui.screens.RegistrationScreen
 import com.isaalutions.nosta.ui.theme.NostaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +30,10 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = Login) {
                     composable<Login> {
                         LoginScreen(navController)
+                    }
+
+                    composable<Registration> {
+                        RegistrationScreen(navController)
                     }
                 }
             }

@@ -15,6 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.isaalutions.nosta.R
+import com.isaalutions.nosta.ui.custom.EmailPasswordFields
 import com.isaalutions.nosta.viewmodels.LoginViewModel
 import kotlinx.serialization.Serializable
 
@@ -43,20 +48,9 @@ fun LoginScreen(
 ) {
     val context = LocalContext.current
 
-    var email = viewModel.email.collectAsState().value
-    var password = viewModel.password.collectAsState().value
-    var passwordVisible = false
-
-    // Google login launcher (Credential Manager)
-    /*val googleSignIn = rememberGoogleSignIn(
-        onIdToken = { idToken ->
-            // Send token to backend or Firebase, etc.
-            viewModel.loginWithGoogleIdToken(idToken)
-        },
-        onError = { error ->
-            viewModel.onUiError(error)
-        }
-    )*/
+    val email = viewModel.email.collectAsState().value
+    val password = viewModel.password.collectAsState().value
+    var showErrors by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -77,36 +71,12 @@ fun LoginScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = email,
-            onValueChange = { viewModel.updateEmail(it) },
-            label = { Text("Email") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            )
-        )
-
-        Spacer(Modifier.height(12.dp))
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = password,
-            onValueChange = { viewModel.updatePassword(it) },
-            label = { Text("Password") },
-            singleLine = true,
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
-            trailingIcon = {
-                TextButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Text(if (passwordVisible) "Hide" else "Show")
-                }
-            }
+        EmailPasswordFields(
+            email = email,
+            password = password,
+            onEmailChange = { viewModel.updateEmail(it) },
+            onPasswordChange = { viewModel.updatePassword(it) },
+            showErrors = showErrors
         )
 
         Spacer(Modifier.height(16.dp))
@@ -115,8 +85,6 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 viewModel.loginWithEmail(email.trim(), password)
-                // Example navigation after success (you’ll probably do this via state)
-                // navController.navigate("home") { popUpTo("login") { inclusive = true } }
             },
             //enabled = email.isNotBlank() && password.isNotBlank()
         ) {
@@ -128,11 +96,8 @@ fun LoginScreen(
         OutlinedButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                viewModel.loginWithEmail(email.trim(), password)
-                // Example navigation after success (you’ll probably do this via state)
-                // navController.navigate("home") { popUpTo("login") { inclusive = true } }
+                navController.navigate(Registration)
             },
-            enabled = email.isNotBlank() && password.isNotBlank()
         ) {
             Text("Register")
         }
@@ -141,7 +106,8 @@ fun LoginScreen(
 
         HorizontalDivider()
 
-        // Google sign in
+        Spacer(Modifier.height(12.dp))
+
         OutlinedButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
