@@ -1,5 +1,7 @@
 package com.isaalutions.nosta
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.isaalutions.nosta.ui.screens.Login
 import com.isaalutions.nosta.ui.screens.LoginScreen
 import com.isaalutions.nosta.ui.screens.Registration
@@ -20,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,7 +31,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             NostaTheme {
-                NavHost(navController = navController, startDestination = Login) {
+                NavHost (navController = navController, startDestination = Login) {
                     composable<Login> {
                         LoginScreen(navController)
                     }

@@ -47,7 +47,8 @@ fun EmailPasswordFields(
     password: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    showErrors: Boolean = false
+    showErrors: Boolean = false,
+    isRegistration: Boolean
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 

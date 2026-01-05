@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,10 +17,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.isaalutions.nosta.R
 import com.isaalutions.nosta.ui.custom.EmailPasswordFields
+import com.isaalutions.nosta.viewmodels.RegistrationState
 import com.isaalutions.nosta.viewmodels.RegistrationViewModel
 import kotlinx.serialization.Serializable
 
@@ -28,24 +36,40 @@ object Registration
 @Composable
 fun RegistrationScreen(
     navController: NavController,
-    registrationViewModel: RegistrationViewModel = hiltViewModel()
+    registrationViewModel: RegistrationViewModel = hiltViewModel(),
 ) {
 
     val email = registrationViewModel.email.collectAsState().value
     val password = registrationViewModel.password.collectAsState().value
-    var showErrors by remember { androidx.compose.runtime.mutableStateOf(false) }
+    val registrationState by registrationViewModel.registrationState.collectAsState()
+    var showErrors by remember { mutableStateOf(false) }
+
+    if (registrationState is RegistrationState.Success) {
+        navController.popBackStack()
+    }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        Text(
+            stringResource(R.string.welcome_nosta),
+            style = TextStyle(fontWeight = FontWeight.Bold)
+        )
+
+        Spacer(Modifier.height(6.dp))
+
         EmailPasswordFields(
             email = email,
             password = password,
             onEmailChange = { registrationViewModel.updateEmail(it) },
             onPasswordChange = { registrationViewModel.updatePassword(it) },
-            showErrors = showErrors
+            showErrors = showErrors,
+            isRegistration = true
         )
 
         Spacer(Modifier.height(16.dp))
@@ -53,10 +77,16 @@ fun RegistrationScreen(
         OutlinedButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                navController.navigate(Registration)
+                showErrors = true
+                registrationViewModel.registerUser()
             },
         ) {
             Text("Register")
+        }
+
+        if (registrationState is RegistrationState.Error) {
+            Spacer(Modifier.height(8.dp))
+            Text(text = (registrationState as RegistrationState.Error).message ?: "Registration failed")
         }
 
     }
