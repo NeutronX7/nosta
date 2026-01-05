@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.isaalutions.nosta.R
 import com.isaalutions.nosta.ui.custom.EmailPasswordFields
+import com.isaalutions.nosta.viewmodels.LoginState
 import com.isaalutions.nosta.viewmodels.LoginViewModel
 import kotlinx.serialization.Serializable
 
@@ -41,7 +42,12 @@ fun LoginScreen(
 
     val email = viewModel.email.collectAsState().value
     val password = viewModel.password.collectAsState().value
+    val loginState by viewModel.loginState.collectAsState()
     var showErrors by rememberSaveable { mutableStateOf(false) }
+
+    if(loginState is LoginState.Success) {
+        navController.navigate(Home)
+    }
 
     Column(
         modifier = Modifier
@@ -76,9 +82,9 @@ fun LoginScreen(
         OutlinedButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                viewModel.loginWithEmail(email.trim(), password)
+                viewModel.loginWithEmail()
             },
-            //enabled = email.isNotBlank() && password.isNotBlank()
+            enabled = email.isNotBlank() && password.isNotBlank()
         ) {
             Text("Login")
         }

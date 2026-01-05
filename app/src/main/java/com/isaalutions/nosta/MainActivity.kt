@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.isaalutions.nosta.ui.screens.Home
+import com.isaalutions.nosta.ui.screens.HomeScreen
 import com.isaalutions.nosta.ui.screens.Login
 import com.isaalutions.nosta.ui.screens.LoginScreen
 import com.isaalutions.nosta.ui.screens.Registration
@@ -38,6 +40,10 @@ class MainActivity : ComponentActivity() {
 
                     composable<Registration> {
                         RegistrationScreen(navController)
+                    }
+
+                    composable<Home> {
+                        HomeScreen(navController)
                     }
                 }
             }
