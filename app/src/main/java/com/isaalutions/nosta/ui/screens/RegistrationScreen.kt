@@ -1,6 +1,7 @@
 package com.isaalutions.nosta.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,8 +10,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -42,53 +48,71 @@ fun RegistrationScreen(
     val email = registrationViewModel.email.collectAsState().value
     val password = registrationViewModel.password.collectAsState().value
     val registrationState by registrationViewModel.registrationState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
     var showErrors by remember { mutableStateOf(false) }
 
-    if (registrationState is RegistrationState.Success) {
-        navController.popBackStack()
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
 
-        Text(
-            stringResource(R.string.welcome_nosta),
-            style = TextStyle(fontWeight = FontWeight.Bold)
-        )
+        if (registrationState is RegistrationState.Success) {
+            navController.popBackStack()
+        } else if (registrationState is RegistrationState.Error) {
+            val errorMessage = (registrationState as RegistrationState.Error).message
+                ?: "Registration failed"
+            LaunchedEffect(snackbarHostState) {
+                snackbarHostState.showSnackbar(
+                    message = errorMessage,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
 
-        Spacer(Modifier.height(6.dp))
-
-        EmailPasswordFields(
-            email = email,
-            password = password,
-            onEmailChange = { registrationViewModel.updateEmail(it) },
-            onPasswordChange = { registrationViewModel.updatePassword(it) },
-            showErrors = showErrors,
-            isRegistration = true
-        )
-
-        Spacer(Modifier.height(16.dp))
-
-        OutlinedButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                showErrors = true
-                registrationViewModel.registerUser()
-            },
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text("Register")
-        }
 
-        if (registrationState is RegistrationState.Error) {
-            Spacer(Modifier.height(8.dp))
-            Text(text = (registrationState as RegistrationState.Error).message ?: "Registration failed")
-        }
+            Text(
+                stringResource(R.string.welcome_nosta),
+                style = TextStyle(fontWeight = FontWeight.Bold)
+            )
 
+            Spacer(Modifier.height(6.dp))
+
+            EmailPasswordFields(
+                email = email,
+                password = password,
+                onEmailChange = { registrationViewModel.updateEmail(it) },
+                onPasswordChange = { registrationViewModel.updatePassword(it) },
+                showErrors = showErrors,
+                isRegistration = true
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    showErrors = true
+                    registrationViewModel.registerUser()
+                },
+            ) {
+                Text("Register")
+            }
+
+            if (registrationState is RegistrationState.Error) {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = (registrationState as RegistrationState.Error).message
+                        ?: "Registration failed"
+                )
+            }
+
+        }
     }
 
 }
