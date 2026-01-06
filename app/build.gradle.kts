@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.material.icons.extended)
 
     //Navigation
     implementation(libs.androidx.navigation.compose)
@@ -66,6 +67,9 @@ dependencies {
     //Dagger hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    //coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     //Google services
     implementation(platform(libs.firebase.bom))

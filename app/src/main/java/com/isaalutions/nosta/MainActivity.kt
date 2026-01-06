@@ -1,5 +1,7 @@
 package com.isaalutions.nosta
 
+import Home
+import HomeScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,8 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.isaalutions.nosta.ui.screens.Home
-import com.isaalutions.nosta.ui.screens.HomeScreen
 import com.isaalutions.nosta.ui.screens.Login
 import com.isaalutions.nosta.ui.screens.LoginScreen
 import com.isaalutions.nosta.ui.screens.Registration
