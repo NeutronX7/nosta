@@ -54,7 +54,7 @@ fun LoginScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) {
+    ) { padding ->
 
         if (loginState is LoginState.Success) {
             navController.navigate(Home)

@@ -8,16 +8,21 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.isaalutions.nosta.io.repository.AuthState
 import com.isaalutions.nosta.ui.screens.Login
 import com.isaalutions.nosta.ui.screens.LoginScreen
 import com.isaalutions.nosta.ui.screens.Registration
 import com.isaalutions.nosta.ui.screens.RegistrationScreen
 import com.isaalutions.nosta.ui.theme.NostaTheme
+import com.isaalutions.nosta.viewmodels.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,20 +35,35 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             NostaTheme {
-                NavHost (navController = navController, startDestination = Login) {
-                    composable<Login> {
-                        LoginScreen(navController)
-                    }
-
-                    composable<Registration> {
-                        RegistrationScreen(navController)
-                    }
-
-                    composable<Home> {
-                        HomeScreen(navController)
-                    }
-                }
+                AppNavHost(navController = navController)
             }
+        }
+    }
+}
+
+@Composable
+fun AppNavHost(
+    navController: NavHostController,
+    authViewModel: AuthViewModel = hiltViewModel()
+) {
+    val authState = authViewModel.authState.collectAsState()
+
+    val start = when (authState.value) {
+        is AuthState.Authenticated -> Home
+        is AuthState.Unauthenticated -> Login
+    }
+
+    NavHost(navController = navController, startDestination = start) {
+        composable<Login> {
+            LoginScreen(navController)
+        }
+
+        composable<Registration> {
+            RegistrationScreen(navController)
+        }
+
+        composable<Home> {
+            HomeScreen(navController)
         }
     }
 }
